@@ -5,53 +5,94 @@
 //        JFrame frame = new JFrame("FrameDemo");
 //    }
 //}
+
+import jdk.swing.interop.SwingInterOpUtils;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.sql.SQLOutput;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 
 public class Graphic extends JPanel {
-    private JTextField textField;
+    private JTextField textField, srcTextField;
     private JLabel label;
+    private JButton start;
+    private JButton source;
+    private JButton dist;
+    private JComboBox comboBox;
+
     String[] petStrings = {
             "May your life be full of love and laughter and your shelves be full of books.",
             "Wishing you many nights of bedtime stories and sweet dreams.",
             "May your life be filled with beautiful stories. ",
             "Given with love and the hope that this book will open the world of literature to you.",
-            "A book is a gift you can open again and again. You are a gift your family will love more and more." };
+            "A book is a gift you can open again and again. You are a gift your family will love more and more."};
 
 
-//    // this is start listeners which actualy starts thread from 0
-    private static JPanel startListeners() {
-        JButton start = new JButton("Sumbit");
+    //    // this is start listeners which actualy starts thread from 0
+    private void startListeners(Box box) {
+        JPanel panel1 = new JPanel(new GridLayout(1, 0));
+        start = new JButton("Sumbit");
+
         start.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("losik");
-
+                System.out.println("submitttt");
+                String name = textField.getText();
+                String path = srcTextField.getText();
+//                String box_str = this.ComboBox.GetItemText(this.ComboBox.SelectedItem);
+                int k = comboBox.getSelectedIndex();
+                System.out.println(comboBox.getItemAt(k));
+                System.out.println(name);
+                System.out.println(path);
             }
         });
-        JPanel pane = new JPanel();
-        pane.setLayout(new BoxLayout(pane, BoxLayout.LINE_AXIS));
-        pane.add(start);
-        pane.add(Box.createHorizontalGlue());
-        return pane;
+        panel1.add(start);
+        panel1.add(new Label(" "));
+        box.add(new JPanel());
+        box.add(panel1);
     }
-//
-//    //this stopp listeners just stopps thread.
-//    private void stopListeners(Box box) {
-//        JButton stop = new JButton("end");
-//        stop.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//
-//            }
-//        });
-//        box.add(stop);
-//    }
+
+    private void sourceListener(Box box) {
+        box.add(new JPanel());
+
+        JPanel panel1 = new JPanel(new GridLayout(1, 0));
+        source = new JButton("Source");
+        source.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("sourceeeeee");
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.showOpenDialog(null);
+
+                File file = fileChooser.getSelectedFile();
+                String str = "";
+                if (file != null) {
+                    str = file.getAbsolutePath();
+                    srcTextField.setText(str);
+                } else {
+                    srcTextField.setText("");
+                }
+            }
+        });
+
+        panel1.add(source);
+        panel1.add(new Label(" "));
+        panel1.add(new Label(" "));
+
+        box.add(new JPanel());
+        box.add(panel1);
+        JPanel panel = new JPanel(new GridLayout(2, 1));
+        srcTextField = new JTextField(10);
+        srcTextField.setText("");
+        panel.add(srcTextField);
+        box.add(panel);
+    }
+
 
     /**
      * this is ur constructor, which initializes everything we need for this task.
@@ -63,24 +104,28 @@ public class Graphic extends JPanel {
         upPart(box);
         //combo box
         ComboBox(box);
-//        startListeners(box);
-//        stopListeners(box);
+        // submit button.
+        sourceListener(box);
+        startListeners(box);
         add(box);
+
+
     }
 
     private void ComboBox(Box box) {
-        JPanel panel1 =new JPanel(new GridLayout(3,1));
+        JPanel panel1 = new JPanel(new GridLayout(3, 1));
 
-        JComboBox comboBox = new JComboBox(petStrings);
+        comboBox = new JComboBox(petStrings);
         comboBox.setRenderer(new MyComboBoxRenderer("Choose a dedication"));
         comboBox.setSelectedIndex(-1); //By default it selects first item, we don't want any selection
         panel1.add(comboBox);
+
         box.add(comboBox);
     }
 
     //this initializes only textField and our label.
     private void upPart(Box box) {
-        JPanel panel =new JPanel(new GridLayout(3,1));
+        JPanel panel = new JPanel(new GridLayout(3, 1));
         label = new JLabel("Dear ");
         textField = new JTextField(10);
         textField.setText("");
@@ -93,19 +138,12 @@ public class Graphic extends JPanel {
     private static void createAndShowGUI() {
         JFrame frame = new JFrame();
         frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
-
+        //run constructor!!
         Graphic count1 = new Graphic();
+
+
         frame.add(count1);
-        // BOXIS DAMATEBAA MAGLAI
-        // AGIA BUTTON
-        JPanel pane = startListeners();
-        frame.add(pane, BorderLayout.EAST);
-
         frame.add(Box.createRigidArea(new Dimension(400, 400)));
-
-
-
-
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
@@ -121,20 +159,16 @@ public class Graphic extends JPanel {
     }
 
 
-
-    class MyComboBoxRenderer extends JLabel implements ListCellRenderer
-    {
+    class MyComboBoxRenderer extends JLabel implements ListCellRenderer {
         private String _title;
 
-        public MyComboBoxRenderer(String title)
-        {
+        public MyComboBoxRenderer(String title) {
             _title = title;
         }
 
         @Override
         public Component getListCellRendererComponent(JList list, Object value,
-                                                      int index, boolean isSelected, boolean hasFocus)
-        {
+                                                      int index, boolean isSelected, boolean hasFocus) {
             if (index == -1 && value == null) setText(_title);
             else setText(value.toString());
             return this;
