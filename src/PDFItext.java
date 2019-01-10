@@ -20,7 +20,7 @@ public class PDFItext {
                 String eredeti = txt;
                 final String s = new String(eredeti.getBytes());
 
-                stream.setData(new String(data).replace("************", s).getBytes("ISO-8859-2"));
+                stream.setData(new String(data).replace("*****", s).getBytes("ISO-8859-2"));
             }
 
         }
