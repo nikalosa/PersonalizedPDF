@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="itextpdf-5.4.0">
+    <CLASSES>
+      <root url="jar://D:/Downloads/itextpdf-5.4.0.jar/itextpdf-5.4.0.jar!/" />
+      <root url="jar://D:/Downloads/aspose-pdf-2.9.0-jdk16.jar/aspose-pdf-2.9.0-jdk16.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
